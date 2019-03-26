@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ClassLibrary1;
+using HelloGit.Models;
 
 namespace HelloGit.Controllers
 {
@@ -10,21 +12,23 @@ namespace HelloGit.Controllers
     {
         public ActionResult Index()
         {
+            Manager mgr = new Manager(Properties.Settings.Default.ConStr);
+            ViewModel vm = new ViewModel();
+            vm.People = mgr.GetAllPeople();
+            return View(vm);
+        }
+
+        public ActionResult AddForm()
+        {
             return View();
         }
 
-        public ActionResult About()
+        [HttpPost]
+        public ActionResult AddPeople(List<Person> people)
         {
-            ViewBag.Message = "Hello changes.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
+            Manager mgr = new Manager(Properties.Settings.Default.ConStr);
+            mgr.AddPeople(people);
+            return RedirectToAction("Index", "Home");
         }
     }
 }
