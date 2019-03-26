@@ -49,19 +49,22 @@ namespace ClassLibrary1
 
         public void AddPeople(List<Person> people)
         {
+            SqlConnection connection = new SqlConnection(_connectionString);
+            SqlCommand cmd = connection.CreateCommand();
+            cmd.CommandText = @"INSERT INTO People VALUES (@firstName, @lastName, @age)";
+            connection.Open();
+
             foreach (Person p in people)
             {
-                SqlConnection connection = new SqlConnection(_connectionString);
-                SqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = @"INSERT INTO People VALUES (@firstName, @lastName, @age)";
+                cmd.Parameters.Clear();
                 cmd.Parameters.AddWithValue("@firstName", p.FirstName);
                 cmd.Parameters.AddWithValue("@lastName", p.LastName);
                 cmd.Parameters.AddWithValue("@age", p.Age);
-                connection.Open();
                 cmd.ExecuteNonQuery();
-                connection.Close();
-                connection.Dispose();
             }
+
+            connection.Close();
+            connection.Dispose();
         }
     }
 }
