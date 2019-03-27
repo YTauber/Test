@@ -1,25 +1,50 @@
 ﻿$(() => {
 
-    let x = 1
+    let x = 0;
 
     $("#add").on('click', function () {
+
+        x++;
 
         $(".row").append(`
             <br />
             <div class="col-md-5">
-            <input class="form-control" type="text" name="people[${x}].firstname" placeholder="First Name" />
+            <input id="f${x}" class="form-control" type="text" name="people[${x}].firstname" placeholder="First Name" />
             </div >
             <div class="col-md-5">
-                <input class="form-control" type="text" name="people[${x}].lastname" placeholder="Last Name" />
+                <input id="l${x}" class="form-control" type="text" name="people[${x}].lastname" placeholder="Last Name" />
             </div>
             <div class="col-md-2">
-                <input class="form-control" type="text" name="people[${x}].age" placeholder="Age" />
+                <input id="a${x}" class="form-control" type="text" name="people[${x}].age" placeholder="Age" />
             </div>
             <br />
                         `)
 
-        x++;
+        $("#submit").prop("disabled", !checkValidity());
 
     })
+
+    $("form").on('change', function () {
+
+        $("#submit").prop("disabled", !checkValidity());
+
+    })
+
+    function checkValidity() {
+
+        for (let i = 0; i <= x; i++) {
+
+            let a = $(`#f${i}`).val();
+            let b = $(`#l${i}`).val();
+            let c = $(`#a${i}`).val();
+
+            if (!a || !b || !c) {
+
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 })
